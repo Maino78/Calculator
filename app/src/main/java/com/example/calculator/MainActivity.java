@@ -20,7 +20,9 @@ import java.util.ListIterator;
 
 public class MainActivity extends AppCompatActivity {
 
+    //don't change elements order
     enum Operator {plus, minus, star, div}
+
     List<Float> numbers = new ArrayList<Float>();
     Float n1 = null;
     Float n2 = null;
@@ -33,10 +35,55 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         screen = findViewById(R.id.screenTxt);
+
+        if (savedInstanceState != null) {
+            String count = savedInstanceState.getString("screen");
+            if (screen != null)
+                screen.setText(count);
+
+            //che succede se n1 o n2 o op sono null?
+            n1 = savedInstanceState.getFloat("n1");
+            n2 = savedInstanceState.getFloat("n2");
+            int operatorCode = savedInstanceState.getInt("op");
+
+            switch (operatorCode) {
+                case 0:
+                    op = Operator.plus;
+                    break;
+                case 1:
+                    op = Operator.minus;
+                    break;
+                case 2:
+                    op = Operator.star;
+                    break;
+
+                case 3:
+                    op = Operator.div;
+                    break;
+
+            }
+        }
     }
 
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //save data
+        if (n1 != null)
+            outState.putFloat("n1", n1);
+
+        if (n2 != null)
+            outState.putFloat("n2", n2);
+
+        if (op != null)
+            outState.putInt("op", op.ordinal());
+
+        outState.putString("screen", String.valueOf(screen.getText()));
+    }
 
     public void numberTap(View view)
     {
